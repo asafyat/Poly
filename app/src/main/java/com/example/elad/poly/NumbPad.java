@@ -12,6 +12,9 @@ package com.example.elad.poly;
     import android.widget.Button;
     import android.widget.TextView;
 
+    import java.util.ArrayList;
+    import java.util.List;
+
 public class NumbPad {
     // flag values
     public static int NOFLAGS = 0;
@@ -22,6 +25,7 @@ public class NumbPad {
 
     static TextView prompt;
     static TextView promptValue;
+    static TextView polyText;
 
     static Button btn1;
     static Button btn2;
@@ -35,16 +39,22 @@ public class NumbPad {
     static Button btn0;
     static Button btnC;
     static Button btnDot;
+    static Button buttonNext;
 
     private String value = "";
     private String addl_text = "";
     private NumbPad me;
 
+    List<String> listOfString = new ArrayList<String>();
+
+    private int mNumOfParameters;
+    private int index;
+
     private int flag_hideInput = 0;
     private int flag_hidePrompt = 0;
 
     public interface numbPadInterface {
-        public String numPadInputValue(String value);
+        public String numPadInputValue(List<String> values );
         public String numPadCanceled();
     }
 
@@ -56,9 +66,11 @@ public class NumbPad {
         addl_text = inTxt;
     }
 
-    public void show(final Activity a, final String promptString, int inFlags,
+    public void show(final Activity a, final String promptString, int inFlags,int numOfParam,
                      final numbPadInterface postrun) {
         me = this;
+        index=0;
+        mNumOfParameters=numOfParam;
         flag_hideInput = inFlags % 2;
         flag_hidePrompt = (inFlags / 2) % 2;
 
@@ -94,6 +106,9 @@ public class NumbPad {
         btn0 = (Button) iView.findViewById(R.id.button0);
         btnC = (Button) iView.findViewById(R.id.buttonC);
         btnDot = (Button) iView.findViewById(R.id.buttonDot);
+        buttonNext= (Button) iView.findViewById(R.id.buttonNext);
+
+        polyText = (TextView)iView.findViewById(R.id.polygonText);
 
         btnC.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
@@ -157,11 +172,21 @@ public class NumbPad {
             }
         });
 
+        listOfString = new ArrayList<String>();
+
+
+        buttonNext.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                SetNextParameter();
+            }
+        });
+
         dlg.setView(iView);
         dlg.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dlg, int sumthin) {
+                listOfString.add(promptValue.getText().toString());
                 dlg.dismiss();
-                postrun.numPadInputValue(me.getValue());
+                postrun.numPadInputValue(listOfString);
             }
         });
         dlg.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -182,4 +207,11 @@ public class NumbPad {
         }
     }
 
+    void SetNextParameter()
+    {
+        listOfString.add(promptValue.getText().toString());
+        polyText.setText(polyText.getText()+ "+" + promptValue.getText().toString()+"X^"+(1+mNumOfParameters-index));
+        promptValue.setText("");
+        index++;
+    }
 }

@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
 
 
 public class MyActivity extends Activity {
@@ -31,14 +32,14 @@ public class MyActivity extends Activity {
 // optionally set additional title
         //np.setAdditionalText("Please enter a poly number deg");
 // show the NumbPad to capture input.
-        np.show(this, "Please enter a poly number deg", NumbPad.NOFLAGS,
+        np.show(this, "Please enter a poly number deg", NumbPad.NOFLAGS,1,
                 new NumbPad.numbPadInterface() {
                     // This is called when the user click the 'Ok' button on the dialog
                     // value is the captured input from the dialog.
-                    public String numPadInputValue(String value)
+                    public String numPadInputValue(List<String> values)
                     {
                         try {
-                            polyDeg = Integer.parseInt(value.toString());
+                            polyDeg = Integer.parseInt(values.get(0).toString());
                         } catch(NumberFormatException nfe) {
                             System.out.println("Could not parse " + nfe);
                         }
@@ -63,24 +64,20 @@ public class MyActivity extends Activity {
     {
         tv.setText("Poly deg is " + polyDeg);
         NumbPad np = new NumbPad();
-        np.show(this, "Please enter a poly ^" + (polyDeg-poly), NumbPad.NOFLAGS,
+        np.show(this, "Please enter a poly ^" + (polyDeg-poly), NumbPad.NOFLAGS,1,
                 new NumbPad.numbPadInterface() {
                     // This is called when the user click the 'Ok' button on the dialog
                     // value is the captured input from the dialog.
-                    public String numPadInputValue(String value)
+                    public String numPadInputValue(List<String> values)
                     {
-                        try {
-                            polyMember[poly]= Integer.parseInt(value.toString());
-                        } catch(NumberFormatException nfe) {
-                            System.out.println("Could not parse " + nfe);
+                        for (int index=0;index<values.size();index++) {
+                            try {
+                                polyMember[index] = Integer.parseInt(values.get(index).toString());
+                            } catch (NumberFormatException nfe) {
+                                System.out.println("Could not parse " + nfe);
+                            }
                         }
-                        if(poly<polyDeg)
-                        {
-                            poly++;
-                            EnterPolynom();
-                        }
-
-                        else calcPoly();
+                        calcPoly();
                         return null;
                     }
 
