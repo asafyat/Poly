@@ -210,7 +210,11 @@ public class NumbPad {
     void SetNextParameter()
     {
         listOfString.add(promptValue.getText().toString());
-        polyText.setText(polyText.getText()+ "+" + promptValue.getText().toString()+"X^"+(1+mNumOfParameters-index));
+        if ((mNumOfParameters-index)>0)
+            polyText.setText(polyText.getText()+ "+" + promptValue.getText().toString()+"X^"+(mNumOfParameters-index));
+        else
+            polyText.setText(polyText.getText()+ "+" + promptValue.getText().toString());
+
         promptValue.setText("");
         index++;
     }

@@ -64,7 +64,7 @@ public class MyActivity extends Activity {
     {
         tv.setText("Poly deg is " + polyDeg);
         NumbPad np = new NumbPad();
-        np.show(this, "Please enter a poly ^" + (polyDeg-poly), NumbPad.NOFLAGS,1,
+        np.show(this, "Please enter a poly ^" + (polyDeg-poly), NumbPad.NOFLAGS,polyDeg,
                 new NumbPad.numbPadInterface() {
                     // This is called when the user click the 'Ok' button on the dialog
                     // value is the captured input from the dialog.
