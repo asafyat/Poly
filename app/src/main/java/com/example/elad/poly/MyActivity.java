@@ -11,31 +11,76 @@ import android.widget.Toast;
 
 public class MyActivity extends Activity {
 
+    int polyDeg=2,
+        poly=0;
+    float polyMember[],
+          X1 =0,
+          X2 =0;
+
+    TextView tv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
         // create an instance of NumbPad
-        TextView tv= (TextView) findViewById(R.id.screenText);
+        tv= (TextView) findViewById(R.id.screenText);
         NumbPad np = new NumbPad();
+
+
 // optionally set additional title
-        np.setAdditionalText("Please enter a poly number");
+        //np.setAdditionalText("Please enter a poly number deg");
 // show the NumbPad to capture input.
-        np.show(this, "Please enter element", NumbPad.NOFLAGS,
+        np.show(this, "Please enter a poly number deg", NumbPad.NOFLAGS,
                 new NumbPad.numbPadInterface() {
                     // This is called when the user click the 'Ok' button on the dialog
                     // value is the captured input from the dialog.
-                    public String numPadInputValue(String value) {
-                        if (value.equals("1234")) {
-                            // do something her
-                            Toast.makeText(getApplicationContext(),
-                                    "Pin is CORRECT! What do you want me to do?", Toast.LENGTH_LONG).show();
-                        } else {
-                            // generate a toast message to inform the user that
-                            // the captured input is not valid
-                            Toast.makeText(getApplicationContext(),
-                                    "Manager Pin is incorrect", Toast.LENGTH_LONG).show();
+                    public String numPadInputValue(String value)
+                    {
+                        try {
+                            polyDeg = Integer.parseInt(value.toString());
+                        } catch(NumberFormatException nfe) {
+                            System.out.println("Could not parse " + nfe);
                         }
+                        polyMember=new float[polyDeg+1];
+                        EnterPolynom();
+                       return null;
+                    }
+
+                    // This is called when the user clicks the 'Cancel' button on the dialog
+                    public String numPadCanceled() {
+                        // generate a toast message to inform the user that the pin
+                        // capture was canceled
+                        Toast.makeText(getApplicationContext(),
+                                "canceled!", Toast.LENGTH_LONG).show();
+                        return null;
+                    }
+
+                });
+    }
+
+    void EnterPolynom()
+    {
+        tv.setText("Poly deg is " + polyDeg);
+        NumbPad np = new NumbPad();
+        np.show(this, "Please enter a poly ^" + (polyDeg-poly), NumbPad.NOFLAGS,
+                new NumbPad.numbPadInterface() {
+                    // This is called when the user click the 'Ok' button on the dialog
+                    // value is the captured input from the dialog.
+                    public String numPadInputValue(String value)
+                    {
+                        try {
+                            polyMember[poly]= Integer.parseInt(value.toString());
+                        } catch(NumberFormatException nfe) {
+                            System.out.println("Could not parse " + nfe);
+                        }
+                        if(poly<polyDeg)
+                        {
+                            poly++;
+                            EnterPolynom();
+                        }
+
+                        else calcPoly();
                         return null;
                     }
 
@@ -44,11 +89,31 @@ public class MyActivity extends Activity {
                         // generate a toast message to inform the user that the pin
                         // capture was canceled
                         Toast.makeText(getApplicationContext(),
-                                "Pin capture canceled!", Toast.LENGTH_LONG).show();
+                                "canceled!", Toast.LENGTH_LONG).show();
                         return null;
                     }
+
                 });
-        tv.setText("aaaaaaaaa" + np.getValue());
+    }
+
+    private void calcPoly()
+    {
+
+        if(polyDeg==2)
+        {
+            float   a=polyMember[2],
+                    b=polyMember[1],
+                    c=polyMember[0];
+                X1 =(float)((-1*b)+ Math.sqrt(Math.pow((float)b,2)-4*a*c))/2;
+                X2 =(float)((-1*b)- Math.sqrt(Math.pow((float)b,2)-4*a*c))/2;
+                if(X1!=X2)
+                tv.setText("X1 is " + X1 + " x2 is " + X2);
+                else
+                    tv.setText("X is "+ X1);
+
+
+
+        }
     }
 
 
