@@ -121,7 +121,7 @@ public class NumbPad {
             public void onClick(View v) {
                 FlipSign();
             }
-            });
+        });
         btn1.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 appendNumber("1");
@@ -228,11 +228,23 @@ public class NumbPad {
     }
     void SetNextParameter()
     {
-        listOfString.add(promptValue.getText().toString());
-        if ((mNumOfParameters-index)>0)
-            polyText.setText(polyText.getText()+ "+" + promptValue.getText().toString()+"X^"+(mNumOfParameters-index));
+        String currentVal=promptValue.getText().toString();
+        listOfString.add(currentVal);
+
+        if ((mNumOfParameters-index)>0) {
+            if (index == 0)
+                polyText.setText(currentVal + "X^" + mNumOfParameters);
+            else
+             if (currentVal.charAt(0)=='-')
+                polyText.setText(polyText.getText() + currentVal+ "X^" + (mNumOfParameters - index));
+            else
+                polyText.setText(polyText.getText() + "+" + currentVal+ "X^" + (mNumOfParameters - index));
+        }
         else
-            polyText.setText(polyText.getText()+ "+" + promptValue.getText().toString());
+            if (currentVal.charAt(0)=='-')
+                polyText.setText(polyText.getText()+ currentVal);
+            else
+                polyText.setText(polyText.getText()+ "+" +currentVal);
 
         promptValue.setText("");
         index++;
