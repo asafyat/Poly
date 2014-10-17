@@ -181,13 +181,16 @@ public class NumbPad {
         listOfString = new ArrayList<String>();
 
 
+
+
+        dlg.setView(iView);
         buttonNext.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                SetNextParameter();
+                if (mNumOfParameters>1)
+                    SetNextParameter();
             }
         });
 
-        dlg.setView(iView);
         dlg.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dlg, int sumthin) {
                 listOfString.add(promptValue.getText().toString());
@@ -230,15 +233,16 @@ public class NumbPad {
     {
         String currentVal=promptValue.getText().toString();
         listOfString.add(currentVal);
+        String displayVal=(currentVal.equals("1")) ? "" : currentVal ;
 
         if ((mNumOfParameters-index)>0) {
             if (index == 0)
-                polyText.setText(currentVal + "X^" + mNumOfParameters);
+                polyText.setText(displayVal + "X^" + mNumOfParameters);
             else
              if (currentVal.charAt(0)=='-')
-                polyText.setText(polyText.getText() + currentVal+ "X^" + (mNumOfParameters - index));
+                polyText.setText(polyText.getText() + displayVal+ "X^" + (mNumOfParameters - index));
             else
-                polyText.setText(polyText.getText() + "+" + currentVal+ "X^" + (mNumOfParameters - index));
+                polyText.setText(polyText.getText() + "+" + displayVal+ "X^" + (mNumOfParameters - index));
         }
         else
             if (currentVal.charAt(0)=='-')
