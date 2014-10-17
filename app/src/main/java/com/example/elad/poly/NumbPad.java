@@ -40,6 +40,7 @@ public class NumbPad {
     static Button btnC;
     static Button btnDot;
     static Button buttonNext;
+    static Button buttonSign;
 
     private String value = "";
     private String addl_text = "";
@@ -107,7 +108,7 @@ public class NumbPad {
         btnC = (Button) iView.findViewById(R.id.buttonC);
         btnDot = (Button) iView.findViewById(R.id.buttonDot);
         buttonNext= (Button) iView.findViewById(R.id.buttonNext);
-
+        buttonSign = (Button) iView.findViewById(R.id.neg);
         polyText = (TextView)iView.findViewById(R.id.polygonText);
 
         btnC.setOnClickListener(new Button.OnClickListener() {
@@ -116,6 +117,11 @@ public class NumbPad {
                 promptValue.setText("");
             }
         });
+        buttonSign.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                FlipSign();
+            }
+            });
         btn1.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 appendNumber("1");
@@ -207,6 +213,19 @@ public class NumbPad {
         }
     }
 
+    void FlipSign()
+    {
+        String temp;
+
+        temp = promptValue.getText().toString();
+        if (temp.charAt(0)=='-')
+            temp=temp.substring(1);
+        else
+            temp = "-" + temp;
+
+        promptValue.setText(temp);
+
+    }
     void SetNextParameter()
     {
         listOfString.add(promptValue.getText().toString());
